@@ -1,0 +1,9 @@
+train: /content/Preprocess/images/train
+val: /content/Preprocess/images/val
+test: /content/Preprocess/images/test
+
+nc: 6
+names: ["Talking phone", "Writing message", "Drinking", "Smoking",
+        "Fatigue and somnolence", "Reaching behind"]
+
+kpt_shape: [17, 3]
