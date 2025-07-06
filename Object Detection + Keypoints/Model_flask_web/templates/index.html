@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #0d0d0d;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Background Animation */
+        .background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .neon-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 162, 255, 0.1),
+                rgba(0, 162, 255, 0.1) 5px,
+                transparent 10px,
+                transparent 50px
+            );
+            animation: moveLines 3s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes moveLines {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100px); }
+        }
+
+        /* Particle Effect */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: moveParticles 5s linear infinite;
+        }
+        @keyframes moveParticles {
+            from { transform: translateY(100vh); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Mouse Trail Effect */
+        .trail {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: rgba(0, 162, 255, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.1s ease-out;
+            filter: blur(5px);
+        }
+
+        /* Center Content */
+        h1 {
+            font-size: 2em;
+            text-transform: uppercase;
+            text-shadow: 0px 0px 10px rgba(0, 162, 255, 0.5);
+        }
+
+        form, a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: 0.3s;
+            text-decoration: none;
+            color: white;
+        }
+
+        input[type="file"], input[type="submit"], a {
+            cursor: pointer;
+            padding: 12px 25px;
+            font-size: 1em;
+            border: none;
+            background: linear-gradient(45deg, #00f2ff, #8a2be2);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 162, 255, 0.7);
+            margin: 5px;
+        }
+
+        input[type="submit"]:hover, a:hover {
+            background: linear-gradient(45deg, #8a2be2, #00f2ff);
+            box-shadow: 0px 0px 20px rgba(0, 162, 255, 0.9);
+        }
+
+        form, a, input {
+            position: relative;
+            z-index: 10;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="neon-lines"></div>
+        <div class="particles"></div>
+    </div>
+
+    <h1>Detect driving behavior</h1>
+    
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="video/*" required>
+        <input type="submit" value="Upload Video">
+    </form>
+
+    <a id="startWebcam" href="/start_webcam">Start Webcam Detection</a>
+
+    <script>
+        // Mouse Trail Effect
+        document.addEventListener("mousemove", function(e) {
+            let trail = document.createElement("div");
+            trail.classList.add("trail");
+            document.body.appendChild(trail);
+            trail.style.left = e.pageX + "px";
+            trail.style.top = e.pageY + "px";
+            setTimeout(() => { trail.remove(); }, 200);
+        });
+
+        // Generate Particles
+        function createParticles() {
+            let particleContainer = document.querySelector(".particles");
+            for (let i = 0; i < 50; i++) {
+                let particle = document.createElement("div");
+                particle.classList.add("particle");
+                particle.style.left = Math.random() * 100 + "vw";
+                particle.style.top = Math.random() * 100 + "vh";
+                particle.style.animationDuration = (Math.random() * 3 + 2) + "s";
+                particleContainer.appendChild(particle);
+                setTimeout(() => { particle.remove(); }, 5000);
+            }
+        }
+        setInterval(createParticles, 1000);
+    </script>
+</body>
+</html>
